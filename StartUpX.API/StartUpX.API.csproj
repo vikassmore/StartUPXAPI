@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.31.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StartUpX.Business\StartUpX.Business.csproj" />
+    <ProjectReference Include="..\StartUpX.Common\StartUpX.Common.csproj" />
+    <ProjectReference Include="..\StartUpX.Entity\StartUpX.Entity.csproj" />
+    <ProjectReference Include="..\StartUpX.Model\StartUpX.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\FounderDocument\" />
+    <Folder Include="Resources\InvestorDocument\" />
+    <Folder Include="Resources\ServicePortFolioDocument\" />
+    <Folder Include="Resources\ServiceInvoiceDocument\" />
+  </ItemGroup>
+
+</Project>
