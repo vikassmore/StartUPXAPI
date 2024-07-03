@@ -1,4 +1,5 @@
-﻿using StartUpX.Business.Interface;
+﻿using Amazon.Auth.AccessControlPolicy;
+using StartUpX.Business.Interface;
 using StartUpX.Common;
 using StartUpX.Entity.DataModels;
 using StartUpX.Model;
@@ -30,8 +31,8 @@ namespace StartUpX.Business.Implementation
         {
             var message = string.Empty;
 
-            var existingRecord = _startupContext.Faqmasters.Any(x => x.FrequentlyAqid == faqModel.FrequentlyAqid && (x.Question == faqModel.Question || x.Answer == faqModel.Answer) && x.IsActive == true);
-            if (!existingRecord)
+            var existingRecord = _startupContext.Faqmasters.Any(x => x.FrequentlyAqid == faqModel.FrequentlyAqid && x.IsActive == true);
+            if (faqModel.FrequentlyAqid ==0)
             {
                 var faqEntity = new Faqmaster();
                 faqEntity.Question = faqModel.Question;
@@ -154,8 +155,8 @@ namespace StartUpX.Business.Implementation
         {
             var message = string.Empty;
 
-            var existingRecord = _startupContext.PolicyMasters.Any(x => x.PolicyId == policyModel.PolicyId && x.PolicyName == policyModel.PolicyName  && x.IsActive == true);
-            if (!existingRecord)
+            var existingRecord = _startupContext.PolicyMasters.Any(x => x.PolicyId == policyModel.PolicyId && x.IsActive == true);
+            if (policyModel.PolicyId == 0)
             {
                 var policyEntity = new PolicyMaster();
                 policyEntity.PolicyName = policyModel.PolicyName;

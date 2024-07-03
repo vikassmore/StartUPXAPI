@@ -81,6 +81,7 @@ namespace StartUpX.API
             services.AddScoped<IUserAuditLogService, UserAuditLogService>();
             services.AddScoped<IFounderInvestorDocumentService, FounderInvestorDocumentService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IAccreditedInvestor, AccreditedInvestorService>();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.Configure<ConfigurationModel>(Configuration.GetSection("ConfigurationModel"));
             services.AddTransient<IEmailSender, EmailSender>();

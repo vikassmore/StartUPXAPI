@@ -329,6 +329,7 @@ namespace StartUpX.Business.Implementation
         public InvestorVerificationModel InvestorProfileCompletion(long userId, ref ErrorResponseModel errorResponseModel)
         {
             var message = string.Empty;
+         
             var investorModel = new InvestorVerificationModel();
             int investorDetailsFound = _startupContext.InvestorDetails.Where(x => x.UserId == userId && x.IsActive == true).Count();
             int suitablityFound = _startupContext.SuitabilityQuestions.Where(x => x.UserId == userId && x.IsActive == true).Count();
@@ -348,6 +349,9 @@ namespace StartUpX.Business.Implementation
             var investorModel = new InvestorVerificationModel();
             investorModel.VerifiedCount = _startupContext.InvestorVerificationDetails.Where(x => x.SendForVerification == true && x.Verified == true && x.IsActive == true).Count();
             investorModel.NonVerifiedCount = _startupContext.InvestorVerificationDetails.Where(x => x.SendForVerification == true && x.Verified == false && x.IsActive == true).Count();
+            investorModel.RequestFundingCount = _startupContext.InvestorInvestmentDetails.Where(x => x.RequestOffering == true && x.IsActive == true).Count();
+            investorModel.InvestorsInvestedCount = _startupContext.InvestorInvestmentDetails.Where(x => x.InvestmentAmount!= null&& x.InvestmentAmount != "" && x.IsActive == true).Count();
+            investorModel.IndicateInvestmentCount = _startupContext.InvestorInvestmentDetails.Where(x => x.IndicateInterest != null&& x.IndicateInterest != "" && x.IsActive == true).Count();
 
             return investorModel;
         }
@@ -523,7 +527,7 @@ namespace StartUpX.Business.Implementation
                 founderModel.LastRoundPrice = _startupContext.FundingDetails.Where(x => x.UserId == item.UserId && x.IsActive == true).OrderByDescending(p => p.CreatedDate).Select(x => x.IssuePrice).FirstOrDefault();
                 double SharesOutstandingSum = _startupContext.FundingDetails.Where(x => x.UserId == item.UserId && x.IsActive == true).Select(t => Convert.ToDouble(t.SharesOutstanding)).Sum();
                 founderModel.LastValuation = Convert.ToDouble(founderModel.LastRoundPrice) * SharesOutstandingSum;
-                founderModel.GaugingPercentage = _startupContext.InvestorInvestmentDetails.Where(x => x.FounderVerifyId == item.FounderVerifyId).Select(t => Convert.ToInt32(t.IndicateInterest)).Sum();
+                founderModel.GaugingPercentage = _startupContext.InvestorInvestmentDetails.Where(x => x.FounderVerifyId == item.FounderVerifyId && x.IsActive == true).Select(t => Convert.ToInt32(t.IndicateInterest)).Sum();
                 var LastRoundPrice1 = _startupContext.FundingDetails.Where(x => x.UserId == item.UserId && x.IsActive == true).OrderByDescending(p => p.CreatedDate).Skip(1).Select(x => x.IssuePrice).FirstOrDefault();
                 double SharesOutstandingSum1 = _startupContext.FundingDetails.Where(x => x.UserId == item.UserId && x.IsActive == true).OrderByDescending(p => p.CreatedDate).Skip(1).Select(t => Convert.ToDouble(t.SharesOutstanding)).Sum();
                 founderModel.SecondLastValuation = Convert.ToDouble(LastRoundPrice1) * SharesOutstandingSum1;
@@ -636,6 +640,190 @@ namespace StartUpX.Business.Implementation
                         }
                     }
                 }
+            }
+            return founderModelList;
+        }
+
+        public List<RequestOfferModel> GetAllrequestOfferingInvestorDetails(ref ErrorResponseModel errorResponseModel)
+        {
+
+            List<RequestOfferModel> founderModelList = new List<RequestOfferModel>();
+            var investorEntity = _startupContext.InvestorInvestmentDetails.Where(x => x.RequestOffering == true && x.IsActive == true).ToList();
+            foreach (var item in investorEntity)
+            {
+                var founderModel = new RequestOfferModel();
+
+                //founderModel.StartupDeatailModel = new StartupDeatailModelList();
+                 var startupEntity = _startupContext.StartUpDetails.Include(x => x.Sector).FirstOrDefault(x => x.UserId == item.InvestorUserId && x.IsActive == true);
+                if (startupEntity != null)
+                {
+                  
+                        var startupModel = new StartupDeatailModelList();
+                        startupModel.StartupId = startupEntity.StartupId;
+                        startupModel.StartUpName = startupEntity.StartUpName;
+                        startupModel.Address = startupEntity.Address;
+                        startupModel.FoundingYear = startupEntity.FoundingYear;
+                        startupModel.LogoFileName = startupEntity.LogoFileName;
+                        startupModel.Logo = startupEntity.Logo;
+                        startupModel.SectorId = startupEntity.SectorId;
+                        startupModel.SectorName = startupEntity.Sector.SectorName;
+                        startupModel.IsStealth = startupEntity.IsStealth;
+                        startupModel.IsActive = startupEntity.IsActive;
+                       
+                    founderModel.StartupDeatailModel = startupModel;
+                }
+                var investorsEntity = _startupContext.InvestorDetails.Where(x => x.UserId == item.CreatedBy && x.IsActive == true).FirstOrDefault();
+                if (investorsEntity != null)
+                {
+                    founderModel.InvestorName = investorsEntity.FirstName + " " + investorsEntity.LastName;
+                    founderModel.investorId = investorsEntity.UserId;
+
+                }
+
+                var founderEntity = _startupContext.FounderVerificationDetails.Where(x => x.UserId == item.InvestorUserId && x.IsActive == true).FirstOrDefault();
+                if (founderEntity != null)
+                {
+
+                    founderModel.Verified = founderEntity.Verified;
+                    founderModel.UserId = founderEntity.UserId;
+                    founderModel.FounderVerifiedId = founderEntity.FounderVerifyId;
+
+                }
+
+                var investEntity = _startupContext.InvestorVerificationDetails.Where(x => x.UserId == item.CreatedBy && x.IsActive == true).FirstOrDefault();
+                if (investEntity != null)
+                {
+
+                    founderModel.InvestorVerifiedId = investEntity.InvestorVerifyId;
+                 
+
+                }
+
+                founderModelList.Add(founderModel);
+            }
+            return founderModelList;
+        }
+
+        public List<InvestorsInvestmentsModel> GetAllInvestmentsDetails(ref ErrorResponseModel errorResponseModel)
+        {
+            List<InvestorsInvestmentsModel> founderModelList = new List<InvestorsInvestmentsModel>();
+            var investorEntity = _startupContext.InvestorInvestmentDetails.Where(x => x.InvestmentAmount != null && x.InvestmentAmount !="" && x.IsActive == true).ToList();
+            foreach (var item in investorEntity)
+            {
+                var founderModel = new InvestorsInvestmentsModel();
+
+                //founderModel.StartupDeatailModel = new StartupDeatailModelList();
+                var startupEntity = _startupContext.StartUpDetails.Include(x => x.Sector).FirstOrDefault(x => x.UserId == item.InvestorUserId && x.IsActive == true);
+                if (startupEntity != null)
+                {
+
+                    var startupModel = new StartupDeatailModelList();
+                    startupModel.StartupId = startupEntity.StartupId;
+                    startupModel.StartUpName = startupEntity.StartUpName;
+                    startupModel.Address = startupEntity.Address;
+                    startupModel.FoundingYear = startupEntity.FoundingYear;
+                    startupModel.LogoFileName = startupEntity.LogoFileName;
+                    startupModel.Logo = startupEntity.Logo;
+                    startupModel.SectorId = startupEntity.SectorId;
+                    startupModel.SectorName = startupEntity.Sector.SectorName;
+                    startupModel.IsStealth = startupEntity.IsStealth;
+                    startupModel.IsActive = startupEntity.IsActive;
+
+                    founderModel.StartupDeatailModel = startupModel;
+                }
+                var investorsEntity = _startupContext.InvestorDetails.Where(x => x.UserId == item.CreatedBy && x.IsActive == true).FirstOrDefault();
+                if (investorsEntity != null)
+                {
+                    founderModel.InvestorName = investorsEntity.FirstName + " " + investorsEntity.LastName;
+                    founderModel.investorId = investorsEntity.UserId;
+
+                }
+
+                var founderEntity = _startupContext.FounderVerificationDetails.Where(x => x.UserId == item.InvestorUserId && x.IsActive == true).FirstOrDefault();
+                if (founderEntity != null)
+                {
+
+                    founderModel.Verified = founderEntity.Verified;
+                    founderModel.UserId = founderEntity.UserId;
+                    founderModel.FounderVerifiedId = founderEntity.FounderVerifyId;
+
+                }
+
+                var investEntity = _startupContext.InvestorVerificationDetails.Where(x => x.UserId == item.CreatedBy && x.IsActive == true).FirstOrDefault();
+                if (investEntity != null)
+                {
+
+                    founderModel.InvestorVerifiedId = investEntity.InvestorVerifyId;
+
+
+                }
+
+                founderModelList.Add(founderModel);
+            }
+            return founderModelList;
+        }
+
+        public List<IndicateInterestModel> GetAllIndicateInvestmentsDetails(ref ErrorResponseModel errorResponseModel)
+        {
+            List<IndicateInterestModel> founderModelList = new List<IndicateInterestModel>();
+            var investorEntity = _startupContext.InvestorInvestmentDetails.Where(x => x.IndicateInterest != null && x.IndicateInterest != "" && x.IsActive == true).ToList();
+           
+
+            foreach (var item in investorEntity)
+            {
+                var founderModel = new IndicateInterestModel();
+                if (investorEntity != null)
+                {
+                    founderModel.IndicateInterest = item.IndicateInterest;
+                }
+
+                //founderModel.StartupDeatailModel = new StartupDeatailModelList();
+                var startupEntity = _startupContext.StartUpDetails.Include(x => x.Sector).FirstOrDefault(x => x.UserId == item.InvestorUserId && x.IsActive == true);
+                if (startupEntity != null)
+                {
+
+                    var startupModel = new StartupDeatailModelList();
+                    startupModel.StartupId = startupEntity.StartupId;
+                    startupModel.StartUpName = startupEntity.StartUpName;
+                    startupModel.Address = startupEntity.Address;
+                    startupModel.FoundingYear = startupEntity.FoundingYear;
+                    startupModel.LogoFileName = startupEntity.LogoFileName;
+                    startupModel.Logo = startupEntity.Logo;
+                    startupModel.SectorId = startupEntity.SectorId;
+                    startupModel.SectorName = startupEntity.Sector.SectorName;
+                    startupModel.IsStealth = startupEntity.IsStealth;
+                    startupModel.IsActive = startupEntity.IsActive;
+
+                    founderModel.StartupDeatailModel = startupModel;
+                }
+                var investorsEntity = _startupContext.InvestorDetails.Where(x => x.UserId == item.CreatedBy && x.IsActive == true).FirstOrDefault();
+                if (investorsEntity != null)
+                {
+                    founderModel.InvestorName = investorsEntity.FirstName + " " + investorsEntity.LastName;
+                    founderModel.investorId = investorsEntity.UserId;
+
+                }
+
+                var founderEntity = _startupContext.FounderVerificationDetails.Where(x => x.UserId == item.InvestorUserId && x.IsActive == true).FirstOrDefault();
+                if (founderEntity != null)
+                {
+
+                    founderModel.Verified = founderEntity.Verified;
+                    founderModel.UserId = founderEntity.UserId;
+                    founderModel.FounderVerifiedId = founderEntity.FounderVerifyId;
+
+                }
+
+                var investEntity = _startupContext.InvestorVerificationDetails.Where(x => x.UserId == item.CreatedBy && x.IsActive == true).FirstOrDefault();
+                if (investEntity != null)
+                {
+
+                    founderModel.InvestorVerifiedId = investEntity.InvestorVerifyId;
+
+
+                }
+
+                founderModelList.Add(founderModel);
             }
             return founderModelList;
         }

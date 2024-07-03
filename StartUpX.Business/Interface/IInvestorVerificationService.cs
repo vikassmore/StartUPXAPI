@@ -67,5 +67,24 @@ namespace StartUpX.Business.Interface
         /// <param name="errorResponseModel"></param>
         /// <returns></returns>
         List<FounderModelDetails> GetAllStartupDetailsBySector(long userId, ref ErrorResponseModel errorResponseModel);
+
+        /// <summary>
+        /// Get All founder details
+        /// </summary>
+        /// <returns></returns>
+        List<RequestOfferModel> GetAllrequestOfferingInvestorDetails(ref ErrorResponseModel errorResponseModel);
+
+        /// <summary>
+        /// Get All founder details
+        /// </summary>
+        /// <returns></returns>
+        List<InvestorsInvestmentsModel> GetAllInvestmentsDetails(ref ErrorResponseModel errorResponseModel);
+
+
+        /// <summary>
+        /// Get All founder details
+        /// </summary>
+        /// <returns></returns>
+        List<IndicateInterestModel> GetAllIndicateInvestmentsDetails(ref ErrorResponseModel errorResponseModel);
     }
 }

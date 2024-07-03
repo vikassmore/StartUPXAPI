@@ -21,6 +21,9 @@ namespace StartUpX.Model
         public string? InvestorProfileCompletion { get; set; }
         public int? VerifiedCount { get; set; }
         public int? NonVerifiedCount { get; set; }
+        public int? RequestFundingCount { get; set; }
+        public int? InvestorsInvestedCount { get; set; }
+        public int? IndicateInvestmentCount { get; set; }
         public int LoggedUserId { get; set; }
 
     }
@@ -43,5 +46,42 @@ namespace StartUpX.Model
 
         public List<FounderInvestorDocumentModel> founderInvestorDocumentList { get; set; }
 
+    }
+
+    public class RequestOfferModel
+    {
+        public string? InvestorName { get; set; }
+
+        public int? UserId { get; set; }
+        public bool? Verified { get; set; }
+        public int? InvestorVerifiedId { get; set; }
+        public int? FounderVerifiedId { get; set; }
+        public int? investorId { get; set; }
+        public StartupDeatailModelList StartupDeatailModel { get; set; }
+    }
+
+    public class InvestorsInvestmentsModel
+    {
+        public string? InvestorName { get; set; }
+
+        public int? UserId { get; set; }
+        public bool? Verified { get; set; }
+        public int? InvestorVerifiedId { get; set; }
+        public int? FounderVerifiedId { get; set; }
+        public int? investorId { get; set; }
+        public StartupDeatailModelList StartupDeatailModel { get; set; }
+    }
+
+    public class IndicateInterestModel
+    {
+        public string? InvestorName { get; set; }
+
+        public int? UserId { get; set; }
+        public bool? Verified { get; set; }
+        public int? InvestorVerifiedId { get; set; }
+        public int? FounderVerifiedId { get; set; }
+        public int? investorId { get; set; }
+        public string? IndicateInterest { get; set; }
+        public StartupDeatailModelList StartupDeatailModel { get; set; }
     }
 }

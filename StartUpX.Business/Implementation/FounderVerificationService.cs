@@ -119,7 +119,9 @@ namespace StartUpX.Business.Implementation
                     fundingList.Add(model);
                 }
                 founderModel.FundingDetails = fundingList;
-                founderModelList.Add(founderModel);
+
+               
+                    founderModelList.Add(founderModel);
             }
             return founderModelList;
         }

@@ -15,6 +15,8 @@ public partial class StartUpDBContext : DbContext
     {
     }
 
+    public virtual DbSet<AccreditedInvestorMaster> AccreditedInvestorMasters { get; set; }
+
     public virtual DbSet<BankDetail> BankDetails { get; set; }
 
     public virtual DbSet<CategoryMaster> CategoryMasters { get; set; }
@@ -85,10 +87,22 @@ public partial class StartUpDBContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=meshbasqldb.c5nzv8jpq3sq.ap-south-1.rds.amazonaws.com;Initial Catalog=StartUpX;User ID=StartUpXAdmin;Password=Admin1234;Trusted_Connection=True;encrypt=false;TrustServerCertificate=True;Integrated Security =false;");
+        => optionsBuilder.UseSqlServer("Server=meshbasqldb.c5nzv8jpq3sq.ap-south-1.rds.amazonaws.com;Database=StartupX;User Id=StartUpXAdmin;Password=Admin1234;TrustServerCertificate=True; ");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AccreditedInvestorMaster>(entity =>
+        {
+            entity.HasKey(e => e.AccreditedInvestorId);
+
+            entity.ToTable("AccreditedInvestorMaster");
+
+            entity.Property(e => e.AccreditedInvestorName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Description).HasMaxLength(200);
+        });
+
         modelBuilder.Entity<BankDetail>(entity =>
         {
             entity.HasKey(e => e.BankId);
@@ -686,4 +700,3 @@ public partial class StartUpDBContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
-

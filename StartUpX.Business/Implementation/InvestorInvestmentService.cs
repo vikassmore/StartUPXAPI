@@ -32,7 +32,7 @@ namespace StartUpX.Business.Implementation
         public List<InvestorInvestmentList> GetAllInvestmentById(long investorUserId, ref ErrorResponseModel errorResponseModel)
         {
             List<InvestorInvestmentList> investmentModelList = new List<InvestorInvestmentList>();
-            var investmentEntity = _startupContext.InvestorInvestmentDetails.Where(x => x.InvestorUserId == investorUserId && x.InvestmentAmount != null && x.IsActive == true).ToList();
+            var investmentEntity = _startupContext.InvestorInvestmentDetails.Where(x => x.CreatedBy == investorUserId && x.InvestmentAmount != null&& x.InvestmentAmount != "" && x.IsActive == true).ToList();
             foreach (var item in investmentEntity)
             {
                 var investmentModel = new InvestorInvestmentList();
@@ -280,6 +280,7 @@ namespace StartUpX.Business.Implementation
                                  {
                                      startup.StartUpName
                                  }).FirstOrDefault();
+
             StringBuilder strBody = new StringBuilder();
             strBody.Append("<body>");
             strBody.Append("<P>StartupX</P>");
@@ -297,7 +298,7 @@ namespace StartUpX.Business.Implementation
             }
             _startupContext.InvestorInvestmentDetails.Add(investmentEntity);
             _startupContext.SaveChanges();
-
+            message = GlobalConstants.InvestorIndicated;
             /// User Audit Log
             var userAuditLog = new UserAuditLogModel();
             userAuditLog.Action = "Add Indicate Interest";
@@ -532,5 +533,19 @@ namespace StartUpX.Business.Implementation
             }
             return message;
         }
+
+        //public List<InvestorInvestmentModel> GetAllRequestOfferinglist()
+        //{
+        //    var requestEntity = _startupContext.InvestorInvestmentDetails.Where(x => x.RequestOffering==true && x.IsActive == true).ToList();
+        //    var requestofferList = requestEntity.Select(x => new InvestorInvestmentModel
+        //    {
+        //        //CountryId = x.CountryId,
+        //        //CountryName = x.CountryName,
+        //        //CountryCode = x.CountryCode,
+        //        IsActive = x.IsActive,
+
+        //    }).ToList();
+        //    return requestofferList;
+        //}
     }
 }

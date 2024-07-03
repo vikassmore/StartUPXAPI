@@ -96,7 +96,8 @@ namespace StartUpX.Business.Implementation
         /// <returns></returns>
         public string DeleteService(int serviceId, int userId, ErrorResponseModel errorResponseModel)
         {
-            var message = string.Empty; var serviceProvider = new ServiceDetail();
+            var message = string.Empty; 
+            var serviceProvider = new ServiceDetail();
 
             var serviceEntity = _startupContext.ServiceDetails.FirstOrDefault(x => x.ServiceId == serviceId && x.IsActive == true);
             if (serviceEntity == null)

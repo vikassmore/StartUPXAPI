@@ -25,6 +25,7 @@ namespace StartUpX.Model
 
         public bool IsActive { get; set; }
         public int LoggedUserId { get; set; }
+       
     }
     public class InvestorInvestmentList
     {
@@ -52,5 +53,6 @@ namespace StartUpX.Model
         public int? UpadateBy { get; set; }
 
         public FounderModelDetails founderModelDetails { get; set; }
+     
     }
 }

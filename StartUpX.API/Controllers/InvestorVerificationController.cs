@@ -73,6 +73,96 @@ namespace StartUpX.API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Get All verified investor details
+        /// </summary>
+        /// <param name="ServiceId"></param>
+        /// <returns></returns>
+
+        [HttpGet("GetAllRequestOfferDetails")]
+        //[Authorize]
+        [ProducesResponseType(typeof(RequestOfferModel), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Get()
+        {
+            ErrorResponseModel errorResponseModel = null;
+            try
+            {
+                var investorModel = _investorVerificationService.GetAllrequestOfferingInvestorDetails(ref errorResponseModel);
+
+                if (investorModel != null)
+                {
+                    return Ok(investorModel);
+                }
+                return ReturnErrorResponse(errorResponseModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, GlobalConstants.Status500Message);
+            }
+        }
+
+        /// <summary>
+        /// Get All verified investor details
+        /// </summary>
+        /// <param name="ServiceId"></param>
+        /// <returns></returns>
+
+        [HttpGet("GetAllInvestmentsDetails")]
+        //[Authorize]
+        [ProducesResponseType(typeof(InvestorsInvestmentsModel), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Getinvestment()
+        {
+            ErrorResponseModel errorResponseModel = null;
+            try
+            {
+                var investorModel = _investorVerificationService.GetAllInvestmentsDetails(ref errorResponseModel);
+
+                if (investorModel != null)
+                {
+                    return Ok(investorModel);
+                }
+                return ReturnErrorResponse(errorResponseModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, GlobalConstants.Status500Message);
+            }
+        }
+
+
+        [HttpGet("GetAllIndicateinterestDetails")]
+        //[Authorize]
+        [ProducesResponseType(typeof(InvestorsInvestmentsModel), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult GetIndicateinvestment()
+        {
+            ErrorResponseModel errorResponseModel = null;
+            try
+            {
+                var investorModel = _investorVerificationService.GetAllIndicateInvestmentsDetails(ref errorResponseModel);
+
+                if (investorModel != null)
+                {
+                    return Ok(investorModel);
+                }
+                return ReturnErrorResponse(errorResponseModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, GlobalConstants.Status500Message);
+            }
+        }
+
+
         /// <summary>
         /// Get All investor details
         /// </summary>

@@ -102,7 +102,7 @@ namespace StartUpX.Business.Implementation
         {
             var message = string.Empty;
 
-            var sectorEntity = _startupContext.SectorDetails.Where(x => x.SectorId == sector.SectorId && (x.SectorName == sector.SectorName || x.SubSectorName == sector.SubSectorName) && x.IsActive == true).FirstOrDefault();
+            var sectorEntity = _startupContext.SectorDetails.Where(x => x.SectorId == sector.SectorId && x.IsActive == true).FirstOrDefault();
 
             if (sectorEntity != null)
             {

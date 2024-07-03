@@ -61,5 +61,13 @@ namespace StartUpX.Business.Interface
         /// <param name="errorResponseModel"></param>
         /// <returns></returns>
         string DeleteFromWatchlist(int investorInvestmentId,int userId, ErrorResponseModel errorResponseModel);
+
+        /// <summary>
+        /// Get the Invested details by User ID
+        /// </summary>
+        /// <param name="investorUserId"></param>
+        /// <param name="errorResponseModel"></param>
+        /// <returns></returns>
+       // List<InvestorInvestmentModel> GetAllRequestOfferinglist();
     }
 }
