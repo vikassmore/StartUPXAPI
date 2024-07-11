@@ -687,10 +687,10 @@ namespace StartUpX.Business.Implementation
         {
             var message = string.Empty;
 
-            var serviceCaseEntity = _startupContext.ServiceLeadManagements.Include(x => x.Service).FirstOrDefault(x => x.ServiceId == serviceModel.ServiceId && x.IsActive == true);
+            var serviceCaseEntity = _startupContext.ServiceLeadManagements.Include(x => x.Service).FirstOrDefault(x => x.ServiceCaseId == serviceModel.ServiceCaseId && x.IsActive == true);
             if (serviceCaseEntity != null)
             {
-                serviceCaseEntity.ServiceCaseId = serviceModel.ServiceCaseId;
+               // serviceCaseEntity.ServiceCaseId = serviceModel.ServiceCaseId;
                 serviceCaseEntity.ServiceId = serviceModel.ServiceId;
                 serviceCaseEntity.Status = serviceModel.Status;
                 serviceCaseEntity.Comment = serviceModel.Comment;
